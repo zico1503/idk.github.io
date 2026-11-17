@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#101d25" />
+  <meta name="description" content="A small community room for Arcade Atlas friends." />
+  <title>Community · Arcade Atlas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=3" />
+  <link rel="stylesheet" href="community.css?v=1" />
+</head>
+<body class="community-page">
+  <main class="community-shell">
+    <header class="community-topbar">
+      <a class="community-brand" href="index.html#home"><span class="community-mark" aria-hidden="true">✳</span><span>ARCADE<span>ATLAS</span></span></a>
+      <div class="community-top-actions"><a class="community-back" href="index.html#discover">← Back to arcade</a><button id="lock-chat" class="lock-button" type="button" hidden>Lock chat</button></div>
+    </header>
+
+    <section class="gate-view" id="gate-view" aria-labelledby="community-title">
+      <div class="gate-art" aria-hidden="true"><div class="gate-orbit orbit-one"></div><div class="gate-orbit orbit-two"></div><div class="gate-star">✳</div><span class="gate-spark spark-a">✦</span><span class="gate-spark spark-b">✧</span></div>
+      <div class="gate-card">
+        <p class="community-eyebrow">THE ARCADE ATLAS LOUNGE</p>
+        <h1 id="community-title">Good games.<br /><span>Good company.</span></h1>
+        <p class="gate-intro">A little space for your crew. Pick a name and enter the room code to join or start a server.</p>
+        <form id="gate-form" novalidate>
+          <label for="display-name">DISPLAY NAME</label>
+          <input id="display-name" name="displayName" type="text" maxlength="24" autocomplete="nickname" placeholder="Your name in the room" required />
+          <label for="room-code">ARCADE ATLAS ACCESS CODE</label>
+          <div class="code-field"><span aria-hidden="true">⌑</span><input id="room-code" name="code" type="password" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="4-digit code" aria-describedby="gate-error" required /></div>
+          <button class="enter-button" type="submit"><span>Continue to servers</span><span aria-hidden="true">↗</span></button>
+          <p id="gate-error" class="gate-error" role="alert" hidden></p>
+          <p id="setup-hint" class="setup-hint" hidden>Need help connecting it? <a href="community/SETUP.md">Open the setup steps ↗</a></p>
+        </form>
+        <aside class="privacy-note"><span aria-hidden="true">ⓘ</span><p><b>Keep it casual, keep it kind.</b> This code is public in the website. Server invites and database membership rules limit who can read each server, but guest accounts are tied to this browser. Don’t post personal or sensitive info.</p></aside>
+      </div>
+    </section>
+
+    <section class="chat-view" id="chat-view" hidden aria-label="Community chat">
+      <aside class="channel-rail">
+        <div class="rail-title"><span>ARCADE ATLAS</span><b>✳</b></div>
+        <label class="side-label" for="server-select">YOUR SERVERS</label>
+        <select id="server-select" class="server-select" aria-label="Choose a server"><option value="">No server selected</option></select>
+        <div class="server-actions"><button id="create-server" type="button">＋ Create</button><button id="join-server" type="button">↗ Join</button></div>
+        <div class="room-card" id="server-card"><div class="room-avatar" id="server-avatar">✳</div><div><b id="server-name">Choose a server</b><small id="server-role">SERVER</small></div><span class="room-chevron">⌄</span></div>
+        <p class="channel-label">TEXT CHANNELS <button id="add-channel" type="button" hidden aria-label="Add channel">＋</button></p>
+        <nav class="channel-list" id="channel-list" aria-label="Chat channels"></nav>
+        <div class="rail-spacer"></div>
+        <div class="current-user"><span class="user-avatar" id="user-avatar">?</span><span class="current-user-copy"><b id="current-name">Guest</b><small><i></i> IN THE LOUNGE</small></span><button id="rail-lock" type="button" aria-label="Lock chat">↪</button></div>
+      </aside>
+      <section class="chat-main" aria-labelledby="channel-title">
+        <header class="channel-header"><button class="mobile-channels" id="mobile-channels" type="button" aria-label="Show channels">☰</button><span class="channel-hash">#</span><div class="channel-heading"><h2 id="channel-title">Choose a server</h2><p id="channel-description">Create a server or join with an invite.</p></div><button id="show-members" class="settings-button" type="button">People</button><button id="server-settings" class="settings-button" type="button" hidden>Manage</button><div class="connection-pill" id="connection-status"><i></i><span>CONNECTING</span></div></header>
+        <div class="message-scroll" id="message-scroll" tabindex="0" aria-label="Channel messages"><div class="messages" id="messages" aria-live="polite" aria-relevant="additions"></div></div>
+        <div class="composer-wrap"><form id="message-form" class="message-form"><label class="sr-only" for="message-input">Message #general</label><textarea id="message-input" maxlength="500" rows="1" placeholder="Message #general" required></textarea><div class="composer-tools"><span><kbd>ENTER</kbd> to send · <kbd>SHIFT + ENTER</kbd> for a new line</span><span class="composer-count" id="composer-count">0 / 500</span><button type="submit" id="send-message" aria-label="Send message" disabled>↑</button></div></form><p class="composer-footnote">Be kind to each other. No personal info, passwords, or game files.</p></div>
+      </section>
+      <aside class="people-rail"><div class="people-title">SERVER MEMBERS <span id="member-count">0</span></div><div id="member-list" class="member-list"></div><div class="staff-tools"><button id="make-invite" type="button" hidden>＋ Create invite</button><button id="view-reports" type="button" hidden>⚑ Reports</button></div><div class="today-card"><span class="today-icon">✦</span><p class="today-kicker">A SMALL SPACE FOR FRIENDS</p><h3>Play nice.<br />Share the good stuff.</h3><p>Invites are limited to 30 joins and expire after seven days.</p></div><div class="people-note"><span>ⓘ</span><p>Servers and messages are stored in your Supabase project. Use nicknames; browser guest accounts cannot be recovered on another device.</p></div><a class="safety-link" href="community/SETUP.md">Server setup & privacy ↗</a></aside>
+    </section>
+    <div id="toast" class="community-toast" role="status" aria-live="polite"></div>
+  </main>
+  <dialog id="community-dialog" class="community-dialog"><form method="dialog" class="dialog-close-row"><button class="dialog-close" aria-label="Close">×</button></form><div id="dialog-content"></div></dialog>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="community-config.js"></script>
+  <script src="community.js?v=1"></script>
+</body>
+</html>
