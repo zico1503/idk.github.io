@@ -100,8 +100,14 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .sticker-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
 .sticker-choice{display:grid;justify-items:center;gap:7px;min-height:126px;padding:9px;border:1px solid #dcedd922;border-radius:13px;background:#ffffff08;color:#e9f0dc;font:600 10px "DM Sans",sans-serif;cursor:pointer}
 .sticker-choice:hover{border-color:#c9ee8f88;background:#c9ee8f12;transform:translateY(-1px)}
-.sticker-choice img{width:min(100%,150px);height:83px;object-fit:contain}
+.sticker-emoji{display:grid;width:min(100%,150px);height:83px;place-items:center;font-size:48px;filter:drop-shadow(0 6px 8px #06130d66);animation:sticker-float 1.5s ease-in-out infinite}
 .sticker-choice b{font-size:10px}
+.chat-sticker{display:grid;width:82px;height:72px;place-items:center;margin:5px 0 2px;border:1px solid #d8ef9c55;border-radius:20px;background:radial-gradient(circle at 35% 23%,#ecf7ca,#c9ee8f 55%,#8cba74);font-size:48px;line-height:1;filter:drop-shadow(0 6px 9px #06130d55);animation:sticker-pop .35s cubic-bezier(.2,1.5,.4,1) both,sticker-float 1.6s ease-in-out .35s infinite}
+.sticker-jungle-heart{background:radial-gradient(circle at 35% 23%,#fae1d1,#f39e91 55%,#d66f6d);border-color:#ffcfc366}
+.sticker-tiny-roar{background:radial-gradient(circle at 35% 23%,#ffe9bd,#e5b171 55%,#bd805d);border-color:#ffdfad66}
+.sticker-good-game{background:radial-gradient(circle at 35% 23%,#eef4c4,#bddb8a 55%,#8ab76f)}
+@keyframes sticker-pop{from{opacity:0;transform:scale(.35) rotate(-12deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+@keyframes sticker-float{0%,100%{translate:0 2px;rotate:-3deg}50%{translate:0 -5px;rotate:3deg}}
 @media(max-width:1100px){.chat-view{grid-template-columns:225px minmax(0,1fr)}.people-rail{display:none}.channel-tools{gap:4px}.channel-tools .settings-button{padding:7px 8px}}
 @media(max-width:680px){
  .community-shell{padding:0 9px 10px}.community-topbar{height:58px}.chat-view{height:calc(100dvh - 76px);min-height:0;margin-top:8px;grid-template-columns:minmax(0,1fr);border-radius:15px}
