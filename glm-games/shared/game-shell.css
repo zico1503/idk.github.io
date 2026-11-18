@@ -649,3 +649,4 @@ table.data th { color: var(--muted); font-size: 0.8rem; text-transform: uppercas
 .aa-returnbar a{color:#ffd079;font-weight:700;text-decoration:none}.aa-returnbar a:hover{text-decoration:underline}.aa-returnbar a:focus-visible{outline:2px solid #ffd079;outline-offset:4px}
 .aa-returnbar span{font-size:11px;color:#9daab8}
 @media(max-width:600px){.aa-returnbar{align-items:flex-start;flex-direction:column;gap:5px;padding:11px 16px}}
+.game-start-error{margin:12px auto;padding:12px 16px;max-width:1180px;border:1px solid #db7a66;border-radius:10px;background:#391f2b;color:#ffe4d6;font:13px/1.55 system-ui,sans-serif}.game-start-error[hidden]{display:none}
