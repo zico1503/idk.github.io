@@ -99,8 +99,8 @@ const guideCopy = {
     actions: '<button class="button button-primary start-from-info" type="button">Launch the game <span>↗</span></button>'
   },
   garden: {
-    kicker: 'BROWSER GAMES · FIND A GAME', title: 'A calm little corner.',
-    body: '<p>Pixel Garden is a directory guide, not a hosted game. Browse cozy games on their official pages and check each creator’s terms, age rating, and any optional purchases before playing.</p><p>For this demo, no third-party game is embedded or presented as a working integration.</p>',
+    kicker: 'ARCADE ATLAS ORIGINAL · GARDEN SIM', title: 'Grow a little world.',
+    body: '<p>Pixel Garden is an original, cozy garden game. Plant seeds, water your patch, harvest flowers, and fill neighbor requests to discover new varieties.</p><p>Your garden saves locally in this browser. No account or external service is required.</p>',
     actions: '<a href="#discover" class="close-and-browse">Back to the directory <span>↗</span></a>'
   },
   classics: {
@@ -166,6 +166,8 @@ gameCards.forEach((card) => {
   const activateCard = () => {
     if (id === 'starboard') openGame();
     else if (id === 'banana') window.location.href = 'banana-catchers/';
+    else if (id === 'garden') window.location.href = 'pixel-garden/';
+    else if (id === 'driftpost' || id === 'emberhollow' || id === 'thornward') window.location.href = `glm-games/${id}/`;
     else if (id === 'ucity') window.playBuiltinGame();
     else openGuide(id);
   };

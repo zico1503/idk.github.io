@@ -2436,3 +2436,23 @@ button {
 }
 
 .art-banana{background:linear-gradient(180deg,#7ac7ad 0,#cae29a 59%,#62884c 60%,#34523d 100%);border-color:#8ca971;isolation:isolate}.art-banana:after{content:"";position:absolute;left:0;right:0;bottom:0;height:34%;background:linear-gradient(170deg,transparent 36%,#29473a 37%);z-index:-1}.banana-art-sun{position:absolute;right:17%;top:25px;width:36px;height:36px;border-radius:50%;background:#ffe36e;box-shadow:0 0 28px #ffe36e88}.banana-art-leaf{position:absolute;top:1px;width:135px;height:28px;border-radius:0 0 100% 0;background:#387d51;transform:rotate(18deg)}.banana-art-leaf.leaf-one{left:-22px}.banana-art-leaf.leaf-two{right:-42px;transform:rotate(65deg);background:#478e51}.banana-art-monkey{position:absolute;z-index:1;left:15%;bottom:21px;font-size:43px;filter:drop-shadow(0 3px 2px #193e31)}.banana-art-fruit{position:absolute;z-index:1;right:18%;bottom:49px;font-size:27px;transform:rotate(-23deg)}.banana-art-title{position:absolute;left:15px;top:43px;color:#fff;font:700 20px/.9 var(--display);letter-spacing:-.5px;text-shadow:0 2px 9px #183d2e}.banana-art-title b{color:#ffe36e}.banana-art-caption{position:absolute;right:10px;bottom:9px;color:#f4f3cf;font:7px var(--mono);letter-spacing:.8px}
+
+/* Imported original GLM games — locally drawn directory art. */
+.art-driftpost,.art-emberhollow,.art-thornward{isolation:isolate}
+.art-driftpost{background:linear-gradient(155deg,#427c9a 0,#95d0cb 48%,#f2bd78 100%)}
+.art-driftpost:after{content:'';position:absolute;left:-5%;right:-5%;bottom:0;height:34%;background:linear-gradient(170deg,transparent 30%,#4b856e 31%);z-index:-1}
+.art-driftpost .glm-sun{position:absolute;right:18%;top:30px;width:46px;height:46px;border-radius:50%;background:#fff0ae;box-shadow:0 0 32px #fff0ae99}
+.glm-island{position:absolute;bottom:27px;width:130px;height:38px;border-radius:50% 50% 24% 24%;background:linear-gradient(#719b73 0 28%,#6c5d55 29%);filter:drop-shadow(0 7px 4px #34555c66)}
+.glm-island:before{content:'';position:absolute;left:24%;top:-20px;width:55px;height:26px;border-radius:70% 10% 60% 10%;background:#417b67;transform:rotate(-10deg)}
+.glm-island.island-a{left:9%;bottom:43px;transform:scale(.8)}.glm-island.island-b{right:8%;bottom:30px;transform:scale(1.14)}
+.glm-kite{position:absolute;z-index:2;left:49%;top:70px;color:#fff3d0;font-size:43px;transform:rotate(-17deg);filter:drop-shadow(0 5px 3px #23475c88)}
+.art-emberhollow{background:radial-gradient(ellipse at 53% 66%,#e99b57 0,#884f4c 18%,#293245 52%,#121a2c 100%)}
+.glm-moon{position:absolute;right:16%;top:25px;width:40px;height:40px;border-radius:50%;background:#e5d7ba;box-shadow:0 0 28px #e5d7ba55}
+.glm-forest{position:absolute;bottom:0;left:0;right:0;height:44%;background:linear-gradient(90deg,#121c29 0 9%,transparent 9% 15%,#192a31 15% 25%,transparent 25% 32%,#11232c 32% 44%,transparent 44% 50%,#1b2c31 50% 63%,transparent 63% 71%,#14242d 71% 85%,transparent 85%),linear-gradient(0deg,#121c29,#283c42)}
+.glm-lantern{position:absolute;z-index:2;left:48%;top:76px;color:#ffd98c;font-size:34px;text-shadow:0 0 13px #ffb14d,0 0 32px #ff7e45}
+.art-thornward{background:linear-gradient(145deg,#6d9d79 0,#c4d288 48%,#507b66 100%)}
+.glm-bloom{position:absolute;left:47%;top:56px;color:#fff0c6;font-size:76px;text-shadow:0 0 27px #fff8be;z-index:2}
+.glm-thorn{position:absolute;bottom:0;width:14px;height:90px;background:#286348;border-radius:90% 0;transform-origin:bottom;box-shadow:12px -24px 0 -4px #357955,25px -40px 0 -5px #397955}
+.glm-thorn.thorn-a{left:17%;transform:rotate(-25deg)}.glm-thorn.thorn-b{right:19%;transform:rotate(20deg)}
+.glm-art-title{position:absolute;left:17px;top:51px;z-index:3;color:#fff9e8;font:700 21px/.86 var(--display);letter-spacing:-.5px;text-shadow:0 3px 12px #172330aa}
+.glm-art-title b{color:#ffe3a1}.glm-art-caption{position:absolute;right:12px;bottom:10px;z-index:3;color:#fff4d5;font:7px var(--mono);letter-spacing:.8px;text-shadow:0 1px 4px #19242c}

@@ -23,6 +23,8 @@ The site includes a GitHub Pages deployment workflow for free public hosting and
 - Search, category chips, and platform / play-method filters.
 - Atlas Passport: a three-stop local route that tracks a Starboard run, the first Banana Catchers milestone, and a first Community message on the current browser.
 - A playable original canvas arcade game with keyboard and touch controls.
+- Pixel Garden, an original local-save garden sim with planting, watering, harvests, neighbor orders, and unlockable seeds.
+- Three additional original browser campaigns from the supplied GLM project: Driftpost (3D flight courier), Emberhollow (lantern-lit action RPG), and Thornward (tower defense). They are listed in the home page catalog and live in `glm-games/` with the shared local game engine.
 - A standalone Banana Catchers game with multiple jungle biomes, powerups, local high scores, sound controls, and cosmetic unlocks.
 - A built-in EmulatorJS runtime, NES and Game Boy / Color cores, and the playable Game Boy Color homebrew µCity. These emulator files are bundled locally; starting the included game does not call an emulator CDN.
 - An optional local-file picker for compatible NES and Game Boy / Color games. Personal files are read by the browser and are not uploaded to Arcade Atlas.
@@ -37,3 +39,5 @@ Arcade Atlas bundles a homebrew game released under GPLv3+ for code and CC BY-SA
 See [third-party notices](THIRD_PARTY_NOTICES.md) for emulator licenses, game attribution, and source archives.
 
 The font files are loaded from Google Fonts when a connection is available; the site remains usable with fallback system fonts when offline.
+
+The imported campaigns save progress in this browser under the currently selected username (or a guest save when signed out). Saves are local to the device and do not sync. Upload the `glm-games/` folder together with the updated `index.html`, `app.js`, `styles.css`, and this README when publishing.
