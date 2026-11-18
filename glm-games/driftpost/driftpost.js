@@ -957,7 +957,7 @@
       '<div class="hud-meter"><span class="m-label">Boost</span><div class="m-bar"><i id="dpBoost" style="background:#3ddad7"></i></div></div>' +
       "</div></div>" +
       '<div class="hud-br"><div class="hud-panel" id="dpCoins"></div></div>' +
-      '<div id="dpMarker" style="position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);color:#ffd257;font-weight:700;font-size:15px;text-shadow:0 1px 3px rgba(0,0,0,0.8);display:none">▲<div id="dpDist" style="font-size:11px;text-align:center"></div></div>';
+      '<div id="dpMarker" style="position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);color:#ffd257;font-weight:700;font-size:15px;text-shadow:0 1px 3px rgba(0,0,0,0.8);display:none"><span id="dpArrow">▲</span><div id="dpDist" style="font-size:11px;text-align:center"></div></div>';
     api.input.addTouchButtons([{ id: "boost", label: "Boost" }, { id: "brake", label: "Brake" }]);
   }
   function updateHud() {
@@ -990,7 +990,8 @@
     var mk = el("dpMarker");
     if (t && def.type !== "hunt") {
       mk.style.display = "block";
-      el("dpDist").textContent = Math.round(dist3(S.craft, t)) + "m";
+      var distEl = el("dpDist");
+      if (distEl) distEl.textContent = Math.round(dist3(S.craft, t)) + "m";
       positionMarker(t);
     } else {
       mk.style.display = "none";
@@ -1011,7 +1012,8 @@
     if (w > 0 && Math.abs(cx) < 1 - half && Math.abs(cy) < 1 - half) {
       el.style.left = ((cx * 0.5 + 0.5) * 100) + "%";
       el.style.top = ((-cy * 0.5 + 0.5) * 100) + "%";
-      el.textContent = "◆";
+      var arrow = document.getElementById("dpArrow");
+      if (arrow) arrow.textContent = "◆";
     } else {
       // clamp to screen edges
       var ang = Math.atan2(cy, cx);
@@ -1019,7 +1021,8 @@
       if (w < 0) { px = -px; py = -py; }
       el.style.left = ((px * 0.5 + 0.5) * 100) + "%";
       el.style.top = ((-py * 0.5 + 0.5) * 100) + "%";
-      el.textContent = "➤";
+      var arrow = document.getElementById("dpArrow");
+      if (arrow) arrow.textContent = "➤";
     }
   }
 

@@ -103,15 +103,20 @@
       o.stop(t0 + dur + 0.3);
       return o;
     }
-    function noise(t0, dur) {
-      var len = Math.max(1, Math.floor(ctx.sampleRate * dur));
+    function noise(t0, dur, loop) {
+      // BufferSource buffers must stay short. Ambient beds loop this small
+      // generated buffer instead of trying to allocate millions of seconds.
+      loop = !!loop || dur > 2;
+      var bufferSeconds = loop ? 0.6 : Math.min(2, Math.max(0.01, dur));
+      var len = Math.max(1, Math.floor(ctx.sampleRate * bufferSeconds));
       var buf = ctx.createBuffer(1, len, ctx.sampleRate);
       var d = buf.getChannelData(0);
       for (var i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
       var src = ctx.createBufferSource();
       src.buffer = buf;
+      src.loop = loop;
       src.start(t0);
-      src.stop(t0 + dur + 0.3);
+      if (!loop) src.stop(t0 + dur + 0.3);
       return src;
     }
     function filter(type, freq, q) {
@@ -164,19 +169,25 @@
       if (!type || type === "none") return;
       var t = ctx.currentTime;
       if (type === "wind" || type === "storm") {
-        var n = noise(0, 1e6);
+        var n = noise(t, 0.6, true);
         var f = filter("lowpass", type === "storm" ? 600 : 320);
         n.connect(f);
         f.connect(ambGain);
         ambNodes = [n, f];
         if (type === "storm") {
-          var lfo = osc("sine", 0.13, 0.13, t, 1e6);
+          var lfo = ctx.createOscillator();
+          lfo.type = "sine";
+          lfo.frequency.value = 0.13;
+          lfo.start(t);
           var lg = ctx.createGain(); lg.gain.value = 180;
           lfo.connect(lg); lg.connect(f.frequency); ambNodes.push(lfo, lg);
         }
       } else if (type === "drone") {
         [110, 165].forEach(function (f0) {
-          var o = osc("sine", f0, f0, t, 1e6);
+          var o = ctx.createOscillator();
+          o.type = "sine";
+          o.frequency.value = f0;
+          o.start(t);
           var g = ctx.createGain(); g.gain.value = 0.5;
           o.connect(g); g.connect(ambGain);
           ambNodes.push(o, g);
@@ -198,7 +209,10 @@
           step++;
         }, 900);
       } else if (type === "cave") {
-        var o2 = osc("sine", 70, 70, t, 1e6);
+        var o2 = ctx.createOscillator();
+        o2.type = "sine";
+        o2.frequency.value = 70;
+        o2.start(t);
         var g2 = ctx.createGain(); g2.gain.value = 0.6;
         o2.connect(g2); g2.connect(ambGain);
         ambNodes.push(o2, g2);
@@ -387,6 +401,9 @@
       return input.stick;
     };
     input.key = function (code) { return !!input.keys[code]; };
+    // Driftpost reads held touch controls with btn(id); keep it parallel to
+    // key(code), while consumeBtn(id) remains the one-shot action helper.
+    input.btn = function (id) { return !!input.buttons[id]; };
     input.consume = function (code) {
       if (input.pressed[code]) { input.pressed[code] = false; return true; }
       return false;
