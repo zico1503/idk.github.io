@@ -7,6 +7,30 @@ const resultsCount = document.querySelector('#results-count');
 const shownNumber = document.querySelector('#shown-number');
 const emptyState = document.querySelector('#empty-state');
 let activeCategory = 'all';
+const routeKeys = ['starboard', 'jungle', 'hello'];
+function completeRouteStop(name) {
+  try { localStorage.setItem(`atlas-route-${name}`, 'true'); } catch { /* Route stamps are optional local progress. */ }
+  renderRoute();
+}
+function renderRoute() {
+  let completed = 0;
+  for (const name of routeKeys) {
+    let done = false;
+    try { done = localStorage.getItem(`atlas-route-${name}`) === 'true'; } catch { /* Storage can be disabled. */ }
+    const stop = document.querySelector(`[data-route-stop="${name}"]`);
+    if (stop) stop.classList.toggle('is-complete', done);
+    if (done) completed += 1;
+  }
+  const count = document.querySelector('#route-count');
+  const fill = document.querySelector('#route-fill');
+  const finish = document.querySelector('#route-finish');
+  if (count) count.textContent = `${completed} / ${routeKeys.length}`;
+  if (fill) fill.style.width = `${completed / routeKeys.length * 100}%`;
+  if (finish) finish.hidden = completed !== routeKeys.length;
+}
+renderRoute();
+window.addEventListener('storage', renderRoute);
+document.querySelector('#route-starboard')?.addEventListener('click', () => openGame());
 
 function applyFilters() {
   const query = searchInput.value.trim().toLowerCase();
@@ -273,7 +297,7 @@ function openGame() {
   gameDialog.showModal();
 }
 document.querySelector('.game-close').addEventListener('click', () => gameDialog.close());
-document.querySelector('#start-game').addEventListener('click', startRun);
+document.querySelector('#start-game').addEventListener('click', () => { startRun(); completeRouteStop('starboard'); });
 gameDialog.addEventListener('close', () => { running = false; cancelAnimationFrame(animationFrame); heldKeys.clear(); });
 gameDialog.addEventListener('click', (event) => { if (event.target === gameDialog) gameDialog.close(); });
 window.addEventListener('keydown', (event) => {

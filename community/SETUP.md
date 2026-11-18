@@ -49,7 +49,7 @@ Messages, membership, roles, profile details, reactions, pins, reports, invite h
 
 The website code `1122` is public and can be discovered. It is only a casual page gate. Server data is protected by membership rules, and invite codes are single-use per join, limited, expiring, and stored as hashes. This provides access control for a small friend group, not high-security private messaging. Do not share personal or sensitive information.
 
-Online indicators use temporary Supabase Realtime Presence for the currently selected server. Unread badges are stored in that browser. Browser notifications are not implemented. GIF search is a labeled placeholder; connecting a provider would require a server-side proxy and provider key. Voice/video buttons are a labeled interface demo; there is no WebRTC signaling or live media connection.
+Online indicators use temporary Supabase Realtime Presence for the currently selected server. Unread badges are stored in that browser. Browser notifications are not implemented. Messages load in batches of 60, with a button to fetch earlier history. The composer includes a small built-in animated sticker set and can show image/GIF attachments inline; online GIF search would require a server-side proxy and provider key. Voice/video buttons are a labeled interface demo; there is no WebRTC signaling or live media connection.
 
 Free usage has quotas and availability limits. Supabase can change its pricing, limits, or terms. The game site itself does not pay for or guarantee Supabase hosting, bandwidth, or uptime.
 

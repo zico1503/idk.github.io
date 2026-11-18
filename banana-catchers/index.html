@@ -93,6 +93,7 @@
     function loadNumber(key,fallback){try{const n=Number(localStorage.getItem(key));return Number.isFinite(n)?n:fallback;}catch{return fallback;}}
     function loadBoolean(key,fallback){try{const v=localStorage.getItem(key);return v===null?fallback:v==='true';}catch{return fallback;}}
     function store(key,value){try{localStorage.setItem(key,String(value));}catch{/* Local scores are a bonus; play still works if storage is blocked. */}}
+    let routeJungleMarked=loadBoolean('atlas-route-jungle',false);
     function cosmeticName(mask){return mask>=2?'LEAF CROWN + SUN SASH':mask>=1?'SUN SASH':'NONE YET';}
     function updateCosmeticLabel(){cosmeticValue.textContent=cosmeticName(activeCosmetics);}
 
@@ -148,6 +149,7 @@
     if('ResizeObserver' in window)new ResizeObserver(resize).observe(stage);window.addEventListener('resize',resize);resize();
 
     function updateHud(){
+      if(score>=10&&!routeJungleMarked){routeJungleMarked=true;store('atlas-route-jungle',true);}
       scoreEl.textContent=String(score);bestEl.textContent=String(best);recordValue.textContent=String(best);
       heartsEl.textContent='♥ '.repeat(hearts).trim()||'♡ ♡ ♡';heartsEl.setAttribute('aria-label',`${hearts} ${hearts===1?'heart':'hearts'} remaining`);
       const p=Math.min(30,score);missionLabel.textContent=crownReached?'CROWN CANOPY REACHED · KEEP GATHERING':`CROWN CANOPY · ${p} / 30`;

@@ -139,6 +139,13 @@
   });
   window.atlasAccounts = { current: () => activeProfile, open, listGames, saveGame, getGame, removeGame, signOut };
 
+  document.querySelector('.community-nav')?.addEventListener('click', () => {
+    const username = activeProfile?.username;
+    if (username) {
+      try { sessionStorage.setItem('arcade-atlas-community-name', username); } catch { /* The chat can ask for a name instead. */ }
+    }
+  });
+
   (async () => {
     try {
       const rememberedId = localStorage.getItem(ACTIVE_KEY);

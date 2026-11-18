@@ -102,7 +102,16 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .sticker-choice:hover{border-color:#c9ee8f88;background:#c9ee8f12;transform:translateY(-1px)}
 .sticker-emoji{display:grid;width:min(100%,150px);height:83px;place-items:center;font-size:48px;filter:drop-shadow(0 6px 8px #06130d66);animation:sticker-float 1.5s ease-in-out infinite}
 .sticker-choice b{font-size:10px}
+.prompt-list{display:grid;gap:7px;margin-top:12px}
+.prompt-choice{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;padding:11px 12px;border:1px solid #dcedd922;border-radius:10px;background:#ffffff08;color:#d9e6d9;text-align:left;font:500 11px "DM Sans",sans-serif;cursor:pointer}
+.prompt-choice:hover{border-color:#c9ee8f80;background:#c9ee8f10;color:#ecf2df}
+.prompt-choice span{color:#c9ee8f}
 .chat-sticker{display:grid;width:82px;height:72px;place-items:center;margin:5px 0 2px;border:1px solid #d8ef9c55;border-radius:20px;background:radial-gradient(circle at 35% 23%,#ecf7ca,#c9ee8f 55%,#8cba74);font-size:48px;line-height:1;filter:drop-shadow(0 6px 9px #06130d55);animation:sticker-pop .35s cubic-bezier(.2,1.5,.4,1) both,sticker-float 1.6s ease-in-out .35s infinite}
+.message-media-preview{display:block;width:auto;max-width:min(320px,65vw);max-height:280px;border-radius:9px;object-fit:contain;background:#0b1518}
+.message-attachment-image{padding:4px;border-color:#dcedd928;background:#091518}
+.load-older{display:block;flex:none;margin:12px auto 4px;padding:8px 12px;border:1px solid #dcedd928;border-radius:9px;background:#ffffff08;color:#bfd49e;font:600 10px "DM Sans",sans-serif;cursor:pointer}
+.load-older:hover:not(:disabled){border-color:#c9ee8f88;background:#c9ee8f10;color:#e3f1c7}
+.load-older:disabled{opacity:.65;cursor:wait}
 .sticker-jungle-heart{background:radial-gradient(circle at 35% 23%,#fae1d1,#f39e91 55%,#d66f6d);border-color:#ffcfc366}
 .sticker-tiny-roar{background:radial-gradient(circle at 35% 23%,#ffe9bd,#e5b171 55%,#bd805d);border-color:#ffdfad66}
 .sticker-good-game{background:radial-gradient(circle at 35% 23%,#eef4c4,#bddb8a 55%,#8ab76f)}
