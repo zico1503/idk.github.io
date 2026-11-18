@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thornward — Arcade Atlas</title>
+<meta name="description" content="Thornward: a tower-defense campaign. Command living thorn-tenders across 5 groves and 25 missions to shield the last Heartbloom from the Blight.">
+<link rel="stylesheet" href="../assets/css/site.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='6' y='4' width='28' height='32' rx='6' fill='%23131a2e' stroke='%23ffb63d' stroke-width='2.4'/%3E%3Crect x='11' y='9' width='18' height='12' rx='2' fill='%230b1020' stroke='%233ddad7' stroke-width='1.6'/%3E%3Ccircle cx='20' cy='27' r='3.4' fill='%23ffb63d'/%3E%3C/svg%3E">
+</head>
+<body data-root="../">
+<header class="site-header" data-nav></header>
+
+<main class="wrap game-page">
+  <div class="game-layout">
+    <div>
+      <div class="game-frame" id="gameFrame">
+        <canvas id="game" aria-label="Thornward game area"></canvas>
+      </div>
+      <p class="small faint" style="margin-top:8px">Hotkeys <kbd>1</kbd>–<kbd>8</kbd> select towers · <kbd>Esc</kbd> pause / cancel placement · <kbd>Space</kbd> send next wave early for bonus leaves</p>
+    </div>
+
+    <aside class="game-info">
+      <div class="panel" style="margin-bottom:14px">
+        <h3 style="margin-top:0">🌺 Thornward</h3>
+        <p class="small muted">The Blight crawls out of the Mire and only the old thorn-magic stands in its way. Plant living thorn-tenders along the invasion paths and protect the last Heartbloom across 5 groves.</p>
+        <p class="small muted"><b>Goal:</b> hold every wave. Stars are earned for flawless defenses and unlock permanent Requisition perks between missions.</p>
+      </div>
+      <div class="panel" style="margin-bottom:14px">
+        <h3>Controls</h3>
+        <table class="data small">
+          <tr><td>Select tower</td><td>Click a card / <kbd>1</kbd>–<kbd>8</kbd></td></tr>
+          <tr><td>Place / inspect</td><td>Click a grass tile / click tower</td></tr>
+          <tr><td>Send wave early</td><td><kbd>Space</kbd> (bonus leaves)</td></tr>
+          <tr><td>Speed / Pause</td><td>▶▶ buttons · <kbd>Esc</kbd></td></tr>
+        </table>
+      </div>
+      <div class="panel">
+        <h3>Campaign</h3>
+        <p class="small muted">25 missions over 5 groves — Sunfield, Mossy Brook, Stonehollow, Mirefen and the Nightmare Hedge. 8 tower families with 3 upgrade tiers each; armored, flying, healing and elite blights; 3 boss encounters. Estimated length: 2.5–3.5 hours including retries and star chasing.</p>
+        <p class="small faint">Watch for Sporewings — they fly over walls, so keep Falconer Nests handy from Grove 3 on.</p>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="site-footer" data-footer></footer>
+
+<script src="../assets/js/site.js"></script>
+<script src="../assets/js/gamekit.js"></script>
+<script src="../assets/js/games/thornward-data.js"></script>
+<script src="../assets/js/games/thornward.js"></script>
+</body>
+</html>

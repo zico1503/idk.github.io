@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Profile — Arcade Atlas</title>
+<meta name="description" content="Your Arcade Atlas profile: name, avatar, achievements, game progress and settings.">
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='6' y='4' width='28' height='32' rx='6' fill='%23131a2e' stroke='%23ffb63d' stroke-width='2.4'/%3E%3Crect x='11' y='9' width='18' height='12' rx='2' fill='%230b1020' stroke='%233ddad7' stroke-width='1.6'/%3E%3Ccircle cx='20' cy='27' r='3.4' fill='%23ffb63d'/%3E%3C/svg%3E">
+</head>
+<body data-root="./">
+<header class="site-header" data-nav></header>
+
+<main class="wrap">
+  <section class="hero" style="padding-bottom:10px">
+    <h1>Profile</h1>
+    <p class="tagline">Your name travels with every high score, community post and save file on this device.</p>
+  </section>
+
+  <div class="grid cols-2">
+    <section class="panel" aria-labelledby="idHead">
+      <h2 id="idHead">Identity</h2>
+      <label class="field">Display name
+        <input type="text" id="nameInput" maxlength="20" placeholder="Guest">
+      </label>
+      <div id="avatarGrid" class="avatar-grid" role="radiogroup" aria-label="Choose an avatar"></div>
+      <p class="small faint" style="margin-top:10px" id="memberSince"></p>
+    </section>
+
+    <section class="panel" aria-labelledby="setHead">
+      <h2 id="setHead">Settings</h2>
+      <div class="toggle-row"><div><div class="lbl">Sound</div><div class="hint">Effects and ambience in every game</div></div>
+        <div class="switch"><input type="checkbox" id="setMute"><i></i></div></div>
+      <div class="toggle-row"><div><div class="lbl">Show FPS in games</div><div class="hint">Display the frame counter</div></div>
+        <div class="switch"><input type="checkbox" id="setFps"><i></i></div></div>
+      <div class="toggle-row"><div><div class="lbl">Reduced effects</div><div class="hint">Fewer particles, no screen shake</div></div>
+        <div class="switch"><input type="checkbox" id="setFx"><i></i></div></div>
+      <div class="toggle-row"><div><div class="lbl">Graphics quality</div><div class="hint" id="qualHint"></div></div>
+        <select id="setQuality" style="background:var(--bg-2);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font:inherit">
+          <option value="auto">Auto</option><option value="high">High</option>
+          <option value="medium">Medium</option><option value="low">Low</option>
+        </select></div>
+    </section>
+
+    <section class="panel" aria-labelledby="progHead">
+      <h2 id="progHead">Progress</h2>
+      <div id="progressTable"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="dataHead">
+      <h2 id="dataHead">Save data</h2>
+      <p class="small muted">Everything is stored in this browser. Export a backup file to move your progress to another device.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+        <button class="btn ghost" id="exportBtn">⬇ Export save</button>
+        <button class="btn ghost" id="importBtn">⬆ Import save</button>
+        <input type="file" id="importFile" accept="application/json,.json" class="hidden">
+        <button class="btn danger" id="wipeBtn">Reset everything</button>
+      </div>
+      <p class="small faint" id="storageState" style="margin-top:10px"></p>
+    </section>
+  </div>
+
+  <section style="margin-top:26px" aria-labelledby="achHead">
+    <div class="section-head"><h2 id="achHead">Achievements</h2><span class="muted small" id="achCount"></span></div>
+    <div class="grid cols-3" id="achGrid"></div>
+  </section>
+</main>
+
+<footer class="site-footer" data-footer></footer>
+
+<script src="assets/js/site.js"></script>
+<script>
+(function () {
+  "use strict";
+  var P = window.Atlas.profile;
+
+  function renderIdentity() {
+    var p = P.get();
+    document.getElementById("nameInput").value = p.name;
+    var grid = document.getElementById("avatarGrid");
+    grid.innerHTML = window.Atlas.AVATAR_KINDS.map(function (k) {
+      return '<button class="avatar-option' + (p.avatar === k ? " selected" : "") +
+        '" data-kind="' + k + '" role="radio" aria-checked="' + (p.avatar === k) +
+        '" title="' + k + '" aria-label="Avatar ' + k + '">' + window.Atlas.avatarSvg(k) + "</button>";
+    }).join("");
+    document.getElementById("memberSince").textContent =
+      "Explorer since " + new Date(p.createdAt).toLocaleDateString() +
+      " · " + p.stats.sessions + " sessions · " + window.Atlas.fmtTime(p.stats.playSeconds) + " played";
+  }
+
+  function renderProgress() {
+    var p = P.get();
+    var rows = window.Atlas.GAMES.map(function (g) {
+      var blob = p.games[g.id] || {};
+      var prog;
+      if (g.id === "atlas8") prog = blob.cartsPlayed ? blob.cartsPlayed + " carts played" : "—";
+      else if (blob.missionsTotal) prog = (blob.missionsDone || 0) + " / " + blob.missionsTotal +
+        " missions · " + (blob.starsTotal || 0) + " ★";
+      else prog = "—";
+      return "<tr><td>" + g.title + "</td><td>" + prog + "</td></tr>";
+    }).join("");
+    document.getElementById("progressTable").innerHTML =
+      '<table class="data"><tr><th>Game</th><th>Progress</th></tr>' + rows + "</table>";
+  }
+
+  function renderAchievements() {
+    var p = P.get();
+    var got = Object.keys(p.achievements).length;
+    document.getElementById("achCount").textContent = got + " of " + window.Atlas.ACHIEVEMENTS.length + " unlocked";
+    document.getElementById("achGrid").innerHTML = window.Atlas.ACHIEVEMENTS.map(function (a) {
+      var has = !!p.achievements[a.id];
+      return '<div class="achievement' + (has ? "" : " locked") + '">' +
+        '<div class="a-icon">' + a.icon + "</div><div><b>" + a.name + "</b><span>" + a.desc +
+        (has ? "" : " · locked") + "</span></div></div>";
+    }).join("");
+  }
+
+  function renderSettings() {
+    var s = P.get().settings;
+    document.getElementById("setMute").checked = s.muted;
+    document.getElementById("setFps").checked = !!s.showFps;
+    document.getElementById("setFx").checked = !!s.reducedFx;
+    document.getElementById("setQuality").value = s.quality || "auto";
+    document.getElementById("qualHint").textContent = s.quality === "auto"
+      ? "Auto — the site picks based on your hardware"
+      : "Forced " + s.quality;
+  }
+
+  /* wire up */
+  document.getElementById("nameInput").addEventListener("change", function (e) {
+    P.setName(e.target.value);
+    window.Atlas.mountChrome();
+    window.Atlas.toast("Name saved", e.target.value.trim() ? "Welcome, " + e.target.value.trim() + "!" : "Playing as Guest.");
+  });
+  document.getElementById("avatarGrid").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-kind]");
+    if (!b) return;
+    P.setAvatar(b.getAttribute("data-kind"));
+    window.Atlas.mountChrome();
+    renderIdentity();
+  });
+  ["setMute", "setFps", "setFx"].forEach(function (id) {
+    var key = id === "setMute" ? "muted" : id === "setFps" ? "showFps" : "reducedFx";
+    document.getElementById(id).addEventListener("change", function (e) {
+      P.setSetting(key, e.target.checked);
+      renderSettings();
+    });
+  });
+  document.getElementById("setQuality").addEventListener("change", function (e) {
+    P.setSetting("quality", e.target.value);
+    renderSettings();
+  });
+
+  document.getElementById("exportBtn").addEventListener("click", function () { P.export(); });
+  document.getElementById("importBtn").addEventListener("click", function () {
+    document.getElementById("importFile").click();
+  });
+  document.getElementById("importFile").addEventListener("change", function (e) {
+    var f = e.target.files[0];
+    if (!f) return;
+    P.import(f, function (err) {
+      if (err) window.Atlas.toast("Import failed", String(err.message || err), true);
+      else {
+        window.Atlas.mountChrome();
+        renderAll();
+        window.Atlas.toast("Save imported", "Profile and progress restored on this device.");
+      }
+      e.target.value = "";
+    });
+  });
+  document.getElementById("wipeBtn").addEventListener("click", function () {
+    if (confirm("Really reset EVERYTHING? Your name, progress, achievements and community posts on this device will be erased. Export a backup first!")) {
+      P.wipeAll();
+      try { localStorage.removeItem("arcadeAtlas.board.v1"); } catch (e) {}
+      window.Atlas.mountChrome();
+      renderAll();
+      window.Atlas.toast("Profile reset", "Starting fresh.");
+    }
+  });
+
+  function renderAll() {
+    renderIdentity();
+    renderSettings();
+    renderProgress();
+    renderAchievements();
+    document.getElementById("storageState").textContent =
+      "Storage: " + (storageOK() ? "working — autosave active" : "unavailable — use Export to keep a manual backup");
+  }
+  function storageOK() {
+    try { localStorage.setItem("__t", "1"); localStorage.removeItem("__t"); return true; }
+    catch (e) { return false; }
+  }
+
+  renderAll();
+})();
+</script>
+</body>
+</html>

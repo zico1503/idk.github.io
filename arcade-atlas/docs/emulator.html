@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atlas-8 Emulator — Arcade Atlas</title>
+<meta name="description" content="The Atlas-8: a tiny fictional 8-bit console emulated in your browser, with original homebrew cartridges you can play right now — or assemble your own.">
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='6' y='4' width='28' height='32' rx='6' fill='%23131a2e' stroke='%23ffb63d' stroke-width='2.4'/%3E%3Crect x='11' y='9' width='18' height='12' rx='2' fill='%230b1020' stroke='%233ddad7' stroke-width='1.6'/%3E%3Ccircle cx='20' cy='27' r='3.4' fill='%23ffb63d'/%3E%3C/svg%3E">
+<style>
+.console-shell {
+  background: linear-gradient(180deg, #1a2440, #131a2e);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: clamp(14px, 3vw, 28px);
+  box-shadow: var(--shadow);
+}
+.crt {
+  position: relative;
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 3px solid #05080f;
+  box-shadow: inset 0 0 40px rgba(30, 60, 80, 0.25);
+}
+.crt canvas {
+  display: block;
+  width: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+.crt .scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(180deg, rgba(0,0,0,0.22) 0 1px, transparent 1px 3px);
+}
+.crt .off-screen {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: #05080f;
+  color: var(--faint);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-align: center;
+  padding: 20px;
+}
+.power-lamp {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #2a3457;
+  display: inline-block;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+.power-lamp.on { background: #57d98a; box-shadow: 0 0 8px rgba(87, 217, 138, 0.8); }
+.atlas-controls {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+.dpad {
+  display: grid;
+  grid-template-columns: repeat(3, 44px);
+  grid-template-rows: repeat(3, 44px);
+  gap: 2px;
+}
+.dpad button, .atlas-btn {
+  background: var(--panel-3);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.dpad button:active, .atlas-btn:active { background: rgba(61, 218, 215, 0.35); }
+.atlas-btn {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  font-size: 0.9rem;
+}
+.atlas-btn.start { width: 84px; height: 34px; border-radius: 17px; font-size: 0.75rem; }
+.cart-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.cart-chip {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 150px;
+}
+.cart-chip small { color: var(--faint); font-weight: 400; }
+.cart-chip.active { border-color: var(--amber); background: rgba(255, 182, 61, 0.08); }
+</style>
+</head>
+<body data-root="./">
+<header class="site-header" data-nav></header>
+
+<main class="wrap">
+  <section class="hero" style="padding-bottom:10px">
+    <h1>Atlas-8 <span class="glow">Emulator</span></h1>
+    <p class="tagline">A tiny fictional 8-bit console, emulated entirely in your browser: an AV8 processor, a 160×120 display, a square-wave beeper and a keypad. It runs original homebrew cartridges written in Atlas-8 assembly — assembled live in the page.</p>
+  </section>
+
+  <div class="grid cols-2" style="align-items:start">
+    <div class="console-shell">
+      <div class="crt" id="crtWrap">
+        <canvas id="atlasScreen" width="160" height="120" aria-label="Atlas-8 screen"></canvas>
+        <div class="scanlines"></div>
+        <div class="off-screen" id="offScreen">— no cartridge inserted —<br><br>Pick a cart below and press power</div>
+      </div>
+      <div class="atlas-controls">
+        <span><span class="power-lamp" id="powerLamp"></span><span class="small muted" id="powerLabel">off</span></span>
+        <div class="dpad" aria-label="Directional pad">
+          <span></span><button data-k="4" aria-label="Up">▲</button><span></span>
+          <button data-k="1" aria-label="Left">◀</button><span></span><button data-k="2" aria-label="Right">▶</button>
+          <span></span><button data-k="8" aria-label="Down">▼</button><span></span>
+        </div>
+        <button class="atlas-btn" data-k="32" aria-label="B button">B</button>
+        <button class="atlas-btn" data-k="16" aria-label="A button">A</button>
+        <button class="atlas-btn start" data-k="64" aria-label="Start button">START</button>
+      </div>
+      <p class="small faint center" style="margin-top:10px">Keyboard: <kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd><kbd>↓</kbd> d-pad · <kbd>Z</kbd> = A · <kbd>X</kbd> = B · <kbd>Enter</kbd> = Start</p>
+    </div>
+
+    <div>
+      <div class="panel" style="margin-bottom:14px">
+        <h3 style="margin-top:0">Cartridge bay</h3>
+        <div class="cart-row" id="cartRow"></div>
+        <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+          <button class="btn small" id="powerBtn">⏻ Power</button>
+          <button class="btn small ghost" id="resetBtn">↺ Reset</button>
+          <button class="btn small ghost" id="importBtn">⬆ Insert JSON cart</button>
+          <input type="file" id="importFile" accept="application/json,.json" class="hidden">
+        </div>
+        <p class="small muted" id="cartInfo" style="margin-top:10px"></p>
+      </div>
+
+      <div class="panel" style="margin-bottom:14px">
+        <h3>How it works</h3>
+        <p class="small muted">Carts are Atlas-8 assembly source. A two-pass assembler in this page turns them into 32 KB ROM images, which the AV8 core executes 60 frames a second. The VDP understands a handful of commands written to its registers — clear screen, plot pixel, draw an 8×8 tile — and the keypad and beeper are memory-mapped too. No copyrighted ROMs, no plugins; everything here is original.</p>
+        <p class="small muted">The three built-in carts were written for the Atlas-8 specifically for Arcade Atlas.</p>
+      </div>
+
+      <div class="panel">
+        <h3>Make your own cart</h3>
+        <p class="small muted">A JSON cartridge looks like <code>{"name":"My cart","src":"org $0200\n lda #12\n hlt"}</code>. Insert one with the button above. The assembler will show any errors on screen.</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer" data-footer></footer>
+
+<script src="assets/js/site.js"></script>
+<script src="assets/js/atlas8.js"></script>
+<script>
+(function () {
+  "use strict";
+  var canvas = document.getElementById("atlasScreen");
+  var offScreen = document.getElementById("offScreen");
+  var powerLamp = document.getElementById("powerLamp");
+  var powerLabel = document.getElementById("powerLabel");
+  var cartInfo = document.getElementById("cartInfo");
+  var console8 = Atlas8.makeConsole(canvas, {
+    muted: function () { return Atlas.profile.get().settings.muted; },
+    onStart: function (cart) {
+      offScreen.style.display = "none";
+      powerLamp.classList.add("on");
+      powerLabel.textContent = "running · " + cart.name;
+      cartInfo.innerHTML = "<b>" + cart.name + "</b> by " + cart.by + " — " + cart.desc +
+        "<br><span class='faint'>Keys: " + cart.keys + "</span>";
+      document.querySelectorAll(".cart-chip").forEach(function (c) {
+        c.classList.toggle("active", c.getAttribute("data-cart") === cart.name);
+      });
+      markPlayed();
+    },
+    onError: function (msg) {
+      powerLamp.classList.remove("on");
+      powerLabel.textContent = "error";
+      offScreen.style.display = "grid";
+      offScreen.innerHTML = "— CART ERROR —<br><br>" + msg;
+    }
+  });
+  var currentCart = null;
+
+  function markPlayed() {
+    var blob = Atlas.profile.game("atlas8");
+    blob.played = true;
+    blob.cartsPlayed = (blob.cartsPlayed || 0) + 1;
+    Atlas.persist();
+  }
+
+  // build cart chips
+  var row = document.getElementById("cartRow");
+  Object.keys(Atlas8.CARTS).forEach(function (key) {
+    var c = Atlas8.CARTS[key];
+    var el = document.createElement("button");
+    el.className = "cart-chip";
+    el.setAttribute("data-cart", c.name);
+    el.innerHTML = "📼 " + c.name + "<small>" + c.desc + "</small>";
+    el.addEventListener("click", function () {
+      currentCart = c;
+      insert();
+    });
+    row.appendChild(el);
+  });
+
+  function insert() {
+    if (!currentCart) return;
+    var ok = console8.load(currentCart);
+    if (!ok) {
+      offScreen.style.display = "grid";
+      offScreen.innerHTML = "— CART ERROR —<br><br>The cartridge failed to assemble.";
+    }
+  }
+
+  document.getElementById("powerBtn").addEventListener("click", function () {
+    if (console8.isRunning()) {
+      console8.stop();
+      powerLamp.classList.remove("on");
+      powerLabel.textContent = "off";
+      offScreen.style.display = "grid";
+      offScreen.innerHTML = "— powered off —";
+    } else if (currentCart) {
+      insert();
+    } else {
+      Atlas.toast("No cartridge", "Pick a cart from the bay first.");
+    }
+  });
+  document.getElementById("resetBtn").addEventListener("click", function () {
+    if (currentCart) console8.reset();
+    else Atlas.toast("No cartridge", "Pick a cart from the bay first.");
+  });
+
+  // touch controls
+  var bits = 0;
+  function setBit(k, on) {
+    if (on) bits |= k; else bits &= ~k;
+    console8.keypad(bits);
+  }
+  document.querySelectorAll("[data-k]").forEach(function (b) {
+    var k = parseInt(b.getAttribute("data-k"), 10);
+    b.addEventListener("pointerdown", function (e) { e.preventDefault(); setBit(k, true); });
+    var up = function () { setBit(k, false); };
+    b.addEventListener("pointerup", up);
+    b.addEventListener("pointercancel", up);
+    b.addEventListener("pointerleave", up);
+  });
+
+  // keyboard
+  var KEYMAP = {
+    ArrowLeft: 1, ArrowRight: 2, ArrowUp: 4, ArrowDown: 8,
+    KeyZ: 16, KeyX: 32, Enter: 64
+  };
+  window.addEventListener("keydown", function (e) {
+    if (KEYMAP[e.code] !== undefined) {
+      e.preventDefault();
+      setBit(KEYMAP[e.code], true);
+    }
+  });
+  window.addEventListener("keyup", function (e) {
+    if (KEYMAP[e.code] !== undefined) setBit(KEYMAP[e.code], false);
+  });
+
+  // import JSON carts
+  document.getElementById("importBtn").addEventListener("click", function () {
+    document.getElementById("importFile").click();
+  });
+  document.getElementById("importFile").addEventListener("change", function (e) {
+    var f = e.target.files[0];
+    if (!f) return;
+    var r = new FileReader();
+    r.onload = function () {
+      try {
+        var data = JSON.parse(r.result);
+        if (!data || typeof data.src !== "string") throw new Error("JSON needs a \"src\" field with assembly source");
+        var cart = {
+          name: String(data.name || "Imported cart"),
+          by: String(data.by || "Unknown"),
+          desc: String(data.desc || "User-supplied cartridge"),
+          keys: String(data.keys || "See cart"),
+          src: data.src
+        };
+        currentCart = cart;
+        insert();
+      } catch (err) {
+        Atlas.toast("Cart rejected", String(err.message || err), true);
+      }
+      e.target.value = "";
+    };
+    r.readAsText(f);
+  });
+})();
+</script>
+</body>
+</html>

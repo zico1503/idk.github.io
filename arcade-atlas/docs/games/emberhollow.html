@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Emberhollow — Arcade Atlas</title>
+<meta name="description" content="Emberhollow: a lantern-lit top-down action RPG. Five chapters, 20 quests, 4 bosses, charms and lantern upgrades across village, fields, forest, marsh and keep.">
+<link rel="stylesheet" href="../assets/css/site.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='6' y='4' width='28' height='32' rx='6' fill='%23131a2e' stroke='%23ffb63d' stroke-width='2.4'/%3E%3Crect x='11' y='9' width='18' height='12' rx='2' fill='%230b1020' stroke='%233ddad7' stroke-width='1.6'/%3E%3Ccircle cx='20' cy='27' r='3.4' fill='%23ffb63d'/%3E%3C/svg%3E">
+</head>
+<body data-root="../">
+<header class="site-header" data-nav></header>
+
+<main class="wrap game-page">
+  <div class="game-layout">
+    <div>
+      <div class="game-frame" id="gameFrame">
+        <canvas id="game" aria-label="Emberhollow game area"></canvas>
+      </div>
+      <p class="small faint" style="margin-top:8px"><kbd>WASD</kbd> move · <kbd>Shift</kbd> sprint / roll · <kbd>Space</kbd> attack · <kbd>F</kbd> ember throw · <kbd>E</kbd> interact · <kbd>Esc</kbd> pause &amp; journal</p>
+    </div>
+
+    <aside class="game-info">
+      <div class="panel" style="margin-bottom:14px">
+        <h3 style="margin-top:0">🏮 Emberhollow</h3>
+        <p class="small muted">A lantern-lit action RPG. The Gloam swallowed the sun three dawns ago and only the Last Lantern still answers. You are its new Warden: relight the valley, one brazier at a time.</p>
+        <p class="small muted"><b>Goal:</b> play through 5 chapters (20 quests including 6 side stories), defeat 4 bosses, gather charms and lantern hues, and bring the dawn back to Emberhollow.</p>
+      </div>
+      <div class="panel" style="margin-bottom:14px">
+        <h3>Controls</h3>
+        <table class="data small">
+          <tr><td>Move · Sprint</td><td><kbd>WASD</kbd> · hold <kbd>Shift</kbd></td></tr>
+          <tr><td>Dodge roll</td><td>tap <kbd>Shift</kbd> / <kbd>L</kbd></td></tr>
+          <tr><td>Attack · Ember throw</td><td><kbd>Space</kbd> · <kbd>F</kbd></td></tr>
+          <tr><td>Interact</td><td><kbd>E</kbd> — braziers, folk, shrines</td></tr>
+          <tr><td>Touch</td><td>Joystick + Attack/Throw/Roll/Use</td></tr>
+        </table>
+      </div>
+      <div class="panel">
+        <h3>Campaign</h3>
+        <p class="small muted">Ember's Wake → The Gloomwood → Mirefen Depths → Hollow Keep → Dawnrise. Braziers are checkpoints (they refill health and lantern oil). Your light radius burns with your oil — manage it. Shielded knights block frontal strikes; roll behind them. Estimated length: 2.5–4 hours including side quests and collecting 12 emberlings and 10 lore pages.</p>
+        <p class="small faint">Progress autosaves at braziers and chapter breaks. Works on touch and keyboard.</p>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="site-footer" data-footer></footer>
+
+<script src="../assets/js/site.js"></script>
+<script src="../assets/js/gamekit.js"></script>
+<script src="../assets/js/games/emberhollow-data.js"></script>
+<script src="../assets/js/games/emberhollow.js"></script>
+</body>
+</html>
