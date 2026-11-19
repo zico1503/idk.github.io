@@ -73,6 +73,7 @@ document.querySelector('.reset-filters').addEventListener('click', () => {
   });
   applyFilters();
 });
+applyFilters();
 document.addEventListener('keydown', (event) => {
   if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
     event.preventDefault();
@@ -167,7 +168,7 @@ gameCards.forEach((card) => {
     if (id === 'starboard') openGame();
     else if (id === 'banana') window.location.href = 'banana-catchers/';
     else if (id === 'garden') window.location.href = 'pixel-garden/';
-    else if (id === 'driftpost' || id === 'emberhollow' || id === 'thornward') window.location.href = `glm-games/${id}/`;
+    else if (id === 'mothlight' || id === 'tideglass' || id === 'buttonwood') window.location.href = `games/${id === 'mothlight' ? 'mothlight-run' : id}/`;
     else if (id === 'ucity') window.playBuiltinGame();
     else openGuide(id);
   };

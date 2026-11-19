@@ -29,6 +29,41 @@
   let audioContext = null;
   let toastTimer = 0;
   let lastMessage = '';
+  const TUTORIAL_KEY = `${SAVE_KEY}-tutorial`;
+  const tutorial = [
+    ['Choose a seed', 'Pick Sunbell or Moonmint from your seed pouch, then plant it in an empty bed.', 'seed'],
+    ['Plant a little start', 'Choose an empty bed. Planting uses one daylight action.', 'plant'],
+    ['Pick the Water tool', 'Select Water in Garden tools. Rainy days water the whole patch for free.', 'water-tool'],
+    ['Give it a drink', 'Tap the new plant to spend one dew drop and help it grow tonight.', 'water'],
+    ['Let night pass', 'Use End day. Watered plants grow one stage, and every fourth day brings rain.', 'end-day'],
+    ['Choose Harvest', 'After a few watered nights, a sparkle marks a flower that is ready to pick.', 'harvest-tool'],
+    ['Gather a bloom', 'Tap a ready flower, then fill the neighbor’s market request for a reward.', 'harvest'],
+  ];
+  let tutorialStep = 0;
+  let tutorialDismissed = false;
+  try { const saved = JSON.parse(localStorage.getItem(TUTORIAL_KEY) || 'null'); tutorialStep = Math.max(0, Math.min(tutorial.length, Number(saved?.step) || 0)); tutorialDismissed = Boolean(saved?.dismissed); } catch { /* The guide still works without storage. */ }
+
+  function renderTutorial() {
+    const coach = $('#tutorial-coach');
+    if (!coach) return;
+    coach.hidden = tutorialDismissed || tutorialStep >= tutorial.length;
+    if (tutorialStep >= tutorial.length) {
+      $('#coach-step').textContent = 'GUIDE COMPLETE';
+      $('#coach-title').textContent = 'You know your way around.';
+      $('#coach-copy').textContent = 'Your garden keeps growing at your pace. Open “How to grow” any time for a refresher.';
+      return;
+    }
+    const [title, copy] = tutorial[tutorialStep];
+    $('#coach-step').textContent = `GUIDE · ${tutorialStep + 1} / ${tutorial.length}`;
+    $('#coach-title').textContent = title;
+    $('#coach-copy').textContent = copy;
+  }
+  function advanceTutorial(action) {
+    if (tutorialDismissed || tutorialStep >= tutorial.length || tutorial[tutorialStep][2] !== action) return;
+    tutorialStep += 1;
+    try { localStorage.setItem(TUTORIAL_KEY, JSON.stringify({ step: tutorialStep, dismissed: false })); } catch { /* The guide continues for this session. */ }
+    renderTutorial();
+  }
 
   function loadGarden() {
     try {
@@ -146,7 +181,7 @@
       choose.setAttribute('aria-pressed', String(selectedSeed === key));
       choose.setAttribute('aria-label', unlocked ? `Select ${crop.name} seeds, ${state.seeds[key]} in pouch` : `${crop.name} locked: complete ${crop.unlock} market notes`);
       choose.innerHTML = `<span class="seed-glyph" style="--crop-color:${crop.color}">${crop.glyph}</span><span><b>${unlocked ? crop.name : '???'}</b><small>${unlocked ? `${state.seeds[key]} in pouch · ${crop.grow} nights` : `Unlock at ${crop.unlock} notes`}</small></span>`;
-      choose.addEventListener('click', () => { selectedSeed = key; setTool('plant'); render(); });
+      choose.addEventListener('click', () => { selectedSeed = key; advanceTutorial('seed'); setTool('plant'); render(); });
       const buy = document.createElement('button');
       buy.type = 'button';
       buy.className = 'seed-buy';
@@ -206,6 +241,7 @@
     tool = nextTool;
     render();
     playNote(nextTool === 'plant' ? 520 : nextTool === 'water' ? 610 : 700);
+    advanceTutorial(`${nextTool}-tool`);
   }
 
   function tendBed(index) {
@@ -217,6 +253,7 @@
       state.seeds[selectedSeed] -= 1;
       state.plants[index] = { type: selectedSeed, growth: 0, watered: isRainy() };
       say(`${CROPS[selectedSeed].name} planted. Give it a drink so it grows tonight.`);
+      advanceTutorial('plant');
       playNote(540);
     } else if (tool === 'water') {
       if (!plant) return say('Plant a seed in that bed first.');
@@ -227,6 +264,7 @@
       state.dew -= 1;
       plant.watered = true;
       say(`A cool drink for the ${CROPS[plant.type].name.toLowerCase()}.`);
+      advanceTutorial('water');
       playNote(620);
     } else if (tool === 'harvest') {
       if (!plant) return say('There is nothing growing in that bed yet.');
@@ -237,6 +275,7 @@
       state.totalHarvested += 1;
       if (plant.type === 'moonmint') state.dew += 1;
       say(`${CROPS[plant.type].name} gathered${plant.type === 'moonmint' ? ' · +1 dew' : ''}.`);
+      advanceTutorial('harvest');
       playNote(740);
     }
     render();
@@ -298,6 +337,7 @@
     state.actions = ACTIONS_PER_DAY;
     if (isRainy()) state.plants.forEach((plant) => { if (plant && plant.growth < CROPS[plant.type].grow) plant.watered = true; });
     say(grown ? `Day ${state.day - 1} is done. ${grown} ${grown === 1 ? 'plant grew' : 'plants grew'} under the moon.` : `Day ${state.day - 1} is done. The garden gets another quiet night.`);
+    advanceTutorial('end-day');
     render();
     playNote(480);
   }
@@ -326,11 +366,16 @@
   const helpDialog = $('#help-dialog');
   function openHelp() { helpDialog.showModal(); }
   $('#help-button').addEventListener('click', openHelp);
+  function restartTutorial() { tutorialStep = 0; tutorialDismissed = false; try { localStorage.setItem(TUTORIAL_KEY, JSON.stringify({ step: 0, dismissed: false })); } catch { /* Use the guide for this session. */ } renderTutorial(); $('#seed-list').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+  $('#tutorial-show').addEventListener('click', restartTutorial);
+  $('#tutorial-reopen').addEventListener('click', restartTutorial);
+  $('#tutorial-skip').addEventListener('click', () => { tutorialDismissed = true; try { localStorage.setItem(TUTORIAL_KEY, JSON.stringify({ step: tutorialStep, dismissed: true })); } catch { /* Dismiss for this session. */ } renderTutorial(); });
   $('#help-close').addEventListener('click', () => helpDialog.close());
   $('#got-it').addEventListener('click', () => helpDialog.close());
   helpDialog.addEventListener('click', (event) => { if (event.target === helpDialog) helpDialog.close(); });
 
   render();
+  renderTutorial();
   let visited = false;
   try { visited = localStorage.getItem(`${SAVE_KEY}-visited`) === 'true'; } catch { /* Continue without browser storage. */ }
   if (!visited) {

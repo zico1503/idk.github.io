@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#193a32">
   <meta name="description" content="A quiet, original little gardening game from Arcade Atlas.">
   <title>Pixel Garden · Arcade Atlas</title>
-  <link rel="stylesheet" href="garden.css?v=1">
+  <link rel="stylesheet" href="garden.css?v=2">
 </head>
 <body>
   <div class="garden-shell">
@@ -26,6 +26,11 @@
         <div class="stat-card"><span class="stat-icon dew-icon">◉</span><div><small>DEW DROPS</small><b id="dew-value">4</b></div></div>
         <div class="stat-card"><span class="stat-icon petal-icon">✿</span><div><small>PETALS</small><b id="petal-value">8</b></div></div>
         <div class="stat-card action-card"><span class="stat-icon action-icon">✦</span><div><small>DAYLIGHT ACTIONS</small><b id="action-value">7 / 7</b></div><button id="next-day" class="next-day" type="button">End day <span>↗</span></button></div>
+      </section>
+
+      <section class="tutorial-coach" id="tutorial-coach" aria-live="polite" aria-label="Garden tutorial">
+        <div><span class="coach-step" id="coach-step">GUIDE · 1 / 7</span><h2 id="coach-title">Choose a seed</h2><p id="coach-copy">Pick Sunbell or Moonmint from your seed pouch, then plant it in an empty bed.</p></div>
+        <div class="coach-actions"><button id="tutorial-show" type="button">Restart guide</button><button id="tutorial-skip" type="button">Hide guide</button></div>
       </section>
 
       <section class="game-layout" aria-label="Pixel Garden game">
@@ -58,7 +63,7 @@
           </section>
 
           <section class="unlocks-card"><div class="unlock-star">✧</div><div><small>GARDEN JOURNAL</small><p id="journal-text">Fill a neighbor’s request to discover new seeds and brighten the patch.</p><div class="journal-progress"><i id="journal-fill"></i></div><b id="journal-count">0 / 2 market notes</b></div></section>
-          <div class="side-actions"><button id="help-button" type="button">How to grow</button><button id="reset-button" type="button">Start a new garden</button></div>
+          <div class="side-actions"><button id="tutorial-reopen" type="button">Show guide</button><button id="help-button" type="button">How to grow</button><button id="reset-button" type="button">Start a new garden</button></div>
         </aside>
       </section>
 
@@ -68,6 +73,7 @@
     </main>
   </div>
   <dialog class="help-dialog" id="help-dialog"><button class="help-close" id="help-close" type="button" aria-label="Close help">×</button><p class="panel-kicker">A NOTE FROM NIM</p><h2>A slow garden, a small plan.</h2><ol><li><b>Plant:</b> choose a seed in your pouch and tap an empty bed.</li><li><b>Water:</b> use one dew drop on a plant before you end the day. Rainy days water the whole patch for free.</li><li><b>Grow:</b> watered plants grow one stage each night. A sparkle means the flower is ready.</li><li><b>Harvest:</b> pick a mature flower, then deliver the neighbor’s bouquet or sell spare blooms.</li><li><b>Discover:</b> fill market notes to unlock new seeds. Your game saves automatically in this browser.</li></ol><button class="deliver-button" id="got-it" type="button">Let’s grow <span>↗</span></button></dialog>
-  <script src="garden.js?v=1"></script>
+  <script src="garden.js?v=2"></script>
 </body>
 </html>
+

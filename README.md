@@ -1,43 +1,31 @@
 # Arcade Atlas
 
-Banana Catchers is an original, self-contained 2D fruit-catching game in [`banana-catchers/index.html`](banana-catchers/index.html). Its art and sound are generated locally by Canvas and Web Audio; it needs no downloads or external libraries. Move with ←/→ or A/D, or drag across the game. On touch screens use the on-screen arrows. Press P or Escape to pause.
+Arcade Atlas is a free-to-use static gaming hub built with plain HTML, CSS, and JavaScript. It is published on GitHub Pages from the repository root; there is no build step.
 
-Username profiles use browser IndexedDB to keep personal game files local to that browser. Emulator save data is scoped by username there too; profiles have no password and do not sync between devices.
+## Original games
 
-A free-to-use, responsive gaming hub built as a small static website with plain HTML, CSS, and JavaScript. The game shelf and guides need no backend; the optional Community chat needs a separately configured free-tier Supabase project.
+- **Mothlight Courier** — a side-view platform campaign with 90 seeded chapters, letter gathering, checkpoints, and touch controls.
+- **Tideglass Cartographer** — a growing series of 90 generated cave mazes with prism hunting and echo-eel hazards.
+- **Buttonwood Signal** — a 90-room push-puzzle story with growing multi-stone puzzles and undo.
+- **Pixel Garden** — a cozy garden sim with an optional interactive tutorial, planting, watering, harvesting, market requests, and unlockable seeds.
+- **Banana Catchers** and **Starboard Sprint** — quick-play arcade games.
 
-## Community chat
+Campaign progress and garden progress are saved locally in each browser. They do not sync between devices and are stored separately from Arcade Atlas username profiles and emulator saves. The campaign maps are generated locally from deterministic chapter seeds; no game art or game engine is fetched from a remote server.
 
-The site includes a multi-server Community page at `community.html`, with custom roles, profiles, live presence, replies, reactions, pins, search, member-only attachments, and a small set of bundled animated stickers. Shared chat requires Supabase; existing installations should run the additive [Community upgrade](community/upgrade.sql) after the original [setup](community/SETUP.md). The shared `1122` code is only a casual client-side gate. RLS limits each server to its members, but this is not high-security private messaging. Guest identities are tied to one browser and can be lost if its site data is cleared. Online GIF search and voice/video are not connected.
+## Community
 
-## Run it
+`community.html` uses the existing Supabase project for shared servers, channels, profiles, invites, roles, and messages. The Channels / Servers / Settings views and background color are per-browser interface preferences. Chat backgrounds are local only; they do not upload images or affect another member's view. The casual `1122` gate is public client-side code, not secure authentication. Do not post sensitive information.
 
-From this folder, run `python -m http.server 8000`, then open `http://localhost:8000` in a modern browser. Browser emulation relies on WebAssembly and is not supported when the page is opened directly as a `file://` URL. The included Starboard Sprint game runs in the browser. Its best score is stored locally in the browser when storage is available.
+No Supabase schema, server, invitation, role, message, or profile data is reset by this update. No new SQL is required for the tabs, categories, or local background setting. Shared chat still depends on the existing Supabase configuration and access policies.
 
-## Put it online
+## Run locally
 
-The site includes a GitHub Pages deployment workflow for free public hosting and automatic HTTPS. Follow [DEPLOY.md](DEPLOY.md) to publish it at a `github.io` address or connect a custom domain you own. Custom domains usually have a registration cost.
+Use a local static server so browser storage, canvas, and emulator features work as expected. From this folder, run `python -m http.server 8000` and open `http://localhost:8000` in a modern browser. For the games, open the catalog and select a title. Mothlight uses arrow keys / A-D and Space to jump; Tideglass uses arrow keys / W-A-S-D; Buttonwood uses the same movement plus Z / Backspace to undo and R to restart a room. P or Escape pauses each campaign. Touch controls appear on narrow screens.
 
-## What is included
+## Publish to GitHub Pages
 
-- Search, category chips, and platform / play-method filters.
-- Atlas Passport: a three-stop local route that tracks a Starboard run, the first Banana Catchers milestone, and a first Community message on the current browser.
-- A playable original canvas arcade game with keyboard and touch controls.
-- Pixel Garden, an original local-save garden sim with planting, watering, harvests, neighbor orders, and unlockable seeds.
-- Three additional original browser campaigns from the supplied GLM project: Driftpost (3D flight courier), Emberhollow (lantern-lit action RPG), and Thornward (tower defense). They are listed in the home page catalog and live in `glm-games/` with the shared local game engine.
-- A standalone Banana Catchers game with multiple jungle biomes, powerups, local high scores, sound controls, and cosmetic unlocks.
-- A built-in EmulatorJS runtime, NES and Game Boy / Color cores, and the playable Game Boy Color homebrew µCity. These emulator files are bundled locally; starting the included game does not call an emulator CDN.
-- An optional local-file picker for compatible NES and Game Boy / Color games. Personal files are read by the browser and are not uploaded to Arcade Atlas.
-- Setup guides for personal emulation, community-hosted Eaglercraft worlds, and streaming from a computer the visitor owns.
-- An optional HTTPS-only field for opening an authorized community instance in a separate tab. Arcade Atlas does not host, embed, proxy, or relay the address.
-- Responsive layouts and keyboard-friendly dialogs.
+Commit and push the changed project files and the `games/` folder to the same repository and branch already used by Arcade Atlas. Keep the site entry point `index.html` at the repository root. GitHub Pages will deploy using the existing workflow. See [DEPLOY.md](DEPLOY.md) for the current publishing steps.
 
-## Scope
+The included EmulatorJS runtime, µCity homebrew, personal-file picker, username profile features, and the existing Supabase Community backend remain in the project. Personal game files stay in the visitor's browser and are not uploaded.
 
-Arcade Atlas bundles a homebrew game released under GPLv3+ for code and CC BY-SA 4.0 for media. It does not bundle commercial games or BIOS files. Visitors must use only other game files they own or are authorized to use. The site does not provide remote computers or streaming bandwidth. Third-party terms and costs can vary.
-
-See [third-party notices](THIRD_PARTY_NOTICES.md) for emulator licenses, game attribution, and source archives.
-
-The font files are loaded from Google Fonts when a connection is available; the site remains usable with fallback system fonts when offline.
-
-The imported campaigns save progress in this browser under the currently selected username (or a guest save when signed out). Saves are local to the device and do not sync. Upload the `glm-games/` folder together with the updated `index.html`, `app.js`, `styles.css`, and this README when publishing.
+Arcade Atlas does not bundle commercial ROMs or BIOS files and does not provide remote computers, streaming bandwidth, or paid services. See [third-party notices](THIRD_PARTY_NOTICES.md) for included software licenses and game attribution.
